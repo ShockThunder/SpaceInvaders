@@ -1,16 +1,27 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace SpaceInvaders
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
+
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        private GameContent gameContent;
+
+        private EnemyWall EnemyWall;
+
+        private int _screenWidth = 0;
+        private int _screenHeight = 0;
 
         public Game1()
         {
@@ -39,6 +50,19 @@ namespace SpaceInvaders
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            gameContent = new GameContent(Content);
+            _screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            _screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            if (_screenWidth > 800)
+                _screenWidth = 800;
+            if (_screenHeight > 600                )
+                _screenHeight = 600;
+
+            graphics.PreferredBackBufferWidth = _screenWidth;
+            graphics.PreferredBackBufferHeight = _screenHeight;
+            graphics.ApplyChanges();
+
+            EnemyWall = new EnemyWall(1, 50, spriteBatch, gameContent);
 
             // TODO: use this.Content to load your game content here
         }
@@ -73,7 +97,11 @@ namespace SpaceInvaders
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
+
+            spriteBatch.Begin();
+            EnemyWall.Draw();
+            spriteBatch.End();
 
             // TODO: Add your drawing code here
 
