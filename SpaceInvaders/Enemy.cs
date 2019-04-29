@@ -49,5 +49,25 @@ namespace SpaceInvaders
             }
         }
 
+        public void SetX(float x)
+        {
+            this._x = x;
+        }
+
+        public void SetY(float y)
+        {
+            this._y = y;
+        }
+
+        public float GetX()
+        {
+            return _x;
+        }
+
+        public float GetY()
+        {
+            return _y;
+        }
+
     }
 }

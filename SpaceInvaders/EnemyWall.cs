@@ -57,5 +57,79 @@ namespace SpaceInvaders
                 }
             }
         }
+
+        bool leftWay = true;
+        public void Moving(GameContent gameContent)
+        {
+            
+            if(GetLowestY() <550)
+            {
+                if (leftWay)
+                {
+                    if ((int)Enemies[0, 0].GetX() >= 10)
+                    {
+                        MoveLeft();                        
+                    }
+                    else
+                    {
+                        MoveDown();
+                        leftWay = false;
+                    }
+                    
+                }
+                else
+                {
+                    if ((int)Enemies[enemyCountY -1 , enemyCountX - 1].GetX() + gameContent.imgInvader.Width <= 790)
+                    {
+                        MoveRight();
+                        return;
+                    }
+                    else
+                    {
+                        MoveDown();
+                        leftWay = true;
+                    }
+                    
+                }
+                
+            }
+            
+        }
+
+        private void MoveLeft()
+        {
+            
+            foreach (var Enemy in Enemies)
+            {
+                Enemy.SetX(Enemy.GetX() - Enemy._width);
+            }
+        }
+
+        private void MoveRight()
+        {
+            foreach (var Enemy in Enemies)
+            {
+                Enemy.SetX(Enemy.GetX() + Enemy._width);
+            }
+        }
+
+        private void MoveDown()
+        {
+            foreach (var Enemy in Enemies)
+            {
+                Enemy.SetY(Enemy.GetY() + Enemy._height);
+            }
+        }
+
+        private float GetLowestY()
+        {
+            float y = 0;
+            foreach (var Enemy in Enemies)
+            {
+                if (Enemy.GetY() > y)
+                    y = Enemy.GetY();
+            }
+            return y;
+        }
     }
 }

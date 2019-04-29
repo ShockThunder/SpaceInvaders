@@ -17,16 +17,24 @@ namespace SpaceInvaders
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         private GameContent gameContent;
-
+        private TimeSpan gamePause;
         private EnemyWall EnemyWall;
-
+        private TimeSpan oldGameTime;
         private int _screenWidth = 0;
         private int _screenHeight = 0;
+        private MouseState oldMouseState;
+        private KeyboardState oldKeyboardState;
+        private Player Player;
+        private Bullet Bullet;
+        private float bulletVelocity = 4;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            //IsFixedTimeStep = false;
+            //TargetElapsedTime = TimeSpan.FromMilliseconds(200);
+            
         }
 
         /// <summary>
@@ -38,7 +46,8 @@ namespace SpaceInvaders
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            gamePause = TimeSpan.FromMilliseconds(500);
+            oldGameTime = TimeSpan.FromMilliseconds(0);
             base.Initialize();
         }
 
@@ -64,6 +73,11 @@ namespace SpaceInvaders
 
             EnemyWall = new EnemyWall(_screenWidth, 50, spriteBatch, gameContent);
 
+            int playerX = (_screenWidth - gameContent.imgPlayer.Width) / 2;
+            int playerY = _screenHeight - 100;
+            Player = new Player(playerX, playerY, _screenWidth, spriteBatch, gameContent);
+            Bullet = new Bullet(_screenWidth, _screenHeight, spriteBatch, gameContent);
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -83,8 +97,47 @@ namespace SpaceInvaders
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            if (!IsActive)
+            {
+                return;
+            }
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
+            KeyboardState newKeyboardState = Keyboard.GetState();
+            MouseState newMouseState = Mouse.GetState();
+
+            if (oldMouseState.X != newMouseState.X)
+            {
+                if (newMouseState.X >= 0 || newMouseState.X < _screenWidth)
+                {
+                    Player.MoveTo(newMouseState.X);
+                }
+            }
+
+            if (newMouseState.LeftButton == ButtonState.Pressed &&
+                oldMouseState.X == newMouseState.X && oldMouseState.Y == newMouseState.Y)
+            {
+                Bullet.Shoot(newMouseState.X, newMouseState.Y, bulletVelocity, Player);
+            }
+
+            if (newKeyboardState.IsKeyDown(Keys.Left))
+            {
+                Player.MoveLeft();
+            }
+
+            if (newKeyboardState.IsKeyDown(Keys.Right))
+            {
+                Player.MoveRight();
+            }
+
+            if (oldKeyboardState.IsKeyUp(Keys.Space) && newKeyboardState.IsKeyDown(Keys.Space))
+            {
+               
+            }
+
+            oldMouseState = newMouseState;
+            oldKeyboardState = newKeyboardState;
 
             // TODO: Add your update logic here
 
@@ -100,8 +153,22 @@ namespace SpaceInvaders
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
+            if(oldGameTime.TotalMilliseconds > gamePause.TotalMilliseconds)
+            {
+                EnemyWall.Moving(gameContent);
+                oldGameTime = TimeSpan.FromMilliseconds(0);
+            }
+            oldGameTime += gameTime.ElapsedGameTime;
+            Player.Draw();
             EnemyWall.Draw();
+            if (Bullet.Visible)
+            {
+                Bullet.Move();
+                Bullet.Draw();
+            }
             spriteBatch.End();
+
+            
 
             // TODO: Add your drawing code here
 
