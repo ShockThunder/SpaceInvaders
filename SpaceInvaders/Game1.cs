@@ -62,7 +62,7 @@ namespace SpaceInvaders
             graphics.PreferredBackBufferHeight = _screenHeight;
             graphics.ApplyChanges();
 
-            EnemyWall = new EnemyWall(1, 50, spriteBatch, gameContent);
+            EnemyWall = new EnemyWall(_screenWidth, 50, spriteBatch, gameContent);
 
             // TODO: use this.Content to load your game content here
         }

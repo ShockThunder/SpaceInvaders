@@ -13,38 +13,34 @@ namespace SpaceInvaders
     public class EnemyWall
     {
         private Enemy[,] Enemies { get; set; }
+        public int enemyCountX { get; set; }
+        public int enemyCountY { get; set; }
+        private float X;
+        private float Y;
 
+
+        //в конструктор передается ширина экрана для расчета координат отрисовки, чтобы все враги были по центру.
         public EnemyWall(float x, float y, SpriteBatch spriteBatch, GameContent gameContent)
         {
-            Enemies = new Enemy[3, 7];
-            float enemyX = x;
-            float enemyY = y;
+
+            enemyCountX = 20;
+            enemyCountY = 5;
+            X = x/2 - gameContent.imgInvader.Width * (enemyCountX - 1);
+            Y = y;
+            
+            Enemies = new Enemy[enemyCountY, enemyCountX];
+            float enemyX = X;
+            float enemyY = Y;
             Color color = Color.White;
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < enemyCountY; i++)
             {
-                switch (i)
+                
+                enemyY = Y + i * 2*gameContent.imgInvader.Height;
+
+                for (int j = 0; j < enemyCountX; j++)
                 {
-                    case 0:
-                        color = Color.Red;
-                        break;
-                    case 1:
-                        color = Color.Orange;
-                        break;
-                    case 2:
-                        color = Color.Yellow;
-                        break;
-                    case 3:
-                        color = Color.Green;
-                        break;
-
-                }
-
-                enemyY = y + i * 2*(gameContent.imgInvader.Height+10);
-
-                for (int j = 0; j < 7; j++)
-                {
-                    enemyX = x + j * 2*(gameContent.imgInvader.Width+10);
+                    enemyX = X + j * 2 *gameContent.imgInvader.Width;
                     Enemy enemy = new Enemy(enemyX, enemyY, color, spriteBatch, gameContent);
                     Enemies[i, j] = enemy;
                 }
@@ -53,9 +49,9 @@ namespace SpaceInvaders
 
         public void Draw()
         {
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < enemyCountY; i++)
             {
-                for (int j = 0; j < 7; j++)
+                for (int j = 0; j < enemyCountX; j++)
                 {
                     Enemies[i, j].Draw();
                 }

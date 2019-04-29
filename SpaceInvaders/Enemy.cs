@@ -24,7 +24,6 @@ namespace SpaceInvaders
         public float _height { get; set; }
         private Color _color { get; set; }
         private SpriteBatch _spriteBatch;
-        private Rectangle rect { get; set; }
         private Texture2D _imgInvader { get; set; }
 
         public Enemy(float x, float y, Color color, SpriteBatch spriteBatch, GameContent gameContent)
@@ -46,7 +45,7 @@ namespace SpaceInvaders
             if (_isAlive)
             {
                 _spriteBatch.Draw(_imgInvader, new Vector2(_x, _y), null,
-                    _color, 0, new Vector2(0,0), 2.0f, SpriteEffects.None, 0);
+                    _color, 0, new Vector2(0,0), 1.0f, SpriteEffects.None, 0);
             }
         }
 
