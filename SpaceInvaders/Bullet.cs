@@ -14,7 +14,7 @@ namespace SpaceInvaders
     {
         public float X;
         public float Y;
-        private float Yvelocity;
+        //private float Yvelocity;
         private float _width;
         private float _height;
         public bool Visible { get; set; }
@@ -67,7 +67,7 @@ namespace SpaceInvaders
                 return false;
             }
 
-            Y = Y - Yvelocity;
+            //Y = Y - Yvelocity;
             return true;
 
         }
