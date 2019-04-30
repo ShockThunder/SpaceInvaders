@@ -24,6 +24,8 @@ namespace SpaceInvaders
         private SpriteBatch _spriteBatch { get; set; }
         private GameContent _gameContent { get; set; }
 
+        private Bullet[] _bullets { get; set; }
+
 
         public Player(float screenWidth, float screenHeight, SpriteBatch spriteBatch, GameContent gameContent)
         {
@@ -82,6 +84,12 @@ namespace SpaceInvaders
                     _x = 0;
                 }
             }
+        }
+        
+        public void Shoot()
+        {
+            EntityManager.Add(new Bullet(this._x, this._y, _spriteBatch, _gameContent));
+            
         }
 
     }

@@ -64,7 +64,7 @@ namespace SpaceInvaders
             {
                 if (leftWay)
                 {
-                    if ((int)Enemies[0, 0].GetX() >= 10)
+                    if (FindLeftInvader() >= 10)
                     {
                         MoveLeft();                        
                     }
@@ -77,7 +77,7 @@ namespace SpaceInvaders
                 }
                 else
                 {
-                    if ((int)Enemies[enemyCountY -1 , enemyCountX - 1].GetX() + gameContent.imgInvader.Width <= 790)
+                    if (FindRightInvader() + gameContent.imgInvader.Width <= 790)
                     {
                         MoveRight();
                         return;
@@ -128,6 +128,46 @@ namespace SpaceInvaders
                     y = Enemy.GetY();
             }
             return y;
+        }
+
+        private float FindLeftInvader()
+        {
+            int x = enemyCountX;
+            int y = enemyCountY;
+
+            for (int i = 0; i < enemyCountY; i++)
+            {
+                for (int j = 0; j < enemyCountX; j++)
+                {
+                    if (Enemies[i,j].IsAlive() && j < x)
+                    {
+                        x = i;
+                        y = j;
+                    }
+                }
+            }
+
+            return Enemies[x, y].GetX();
+        }
+
+        private float FindRightInvader()
+        {
+            int x = 0;
+            int y = 0;
+
+            for (int i = 0; i < enemyCountY; i++)
+            {
+                for (int j = 0; j < enemyCountX; j++)
+                {
+                    if (Enemies[i, j].IsAlive() && j > x)
+                    {
+                        x = i;
+                        y = j;
+                    }
+                }
+            }
+
+            return Enemies[x, y].GetX();
         }
     }
 }

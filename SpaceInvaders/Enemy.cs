@@ -69,5 +69,14 @@ namespace SpaceInvaders
             return _y;
         }
 
+        public bool IsAlive()
+        {
+            return _isAlive;
+        }
+
+        public void Kill()
+        {
+            this._isAlive = false;
+        }
     }
 }

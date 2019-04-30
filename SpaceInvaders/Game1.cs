@@ -130,10 +130,9 @@ namespace SpaceInvaders
                 }
             }
 
-            if (newMouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton != ButtonState.Pressed &&
-                oldMouseState.X == newMouseState.X && oldMouseState.Y == newMouseState.Y)
+            if (newMouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton != ButtonState.Pressed)
             {
-
+                Player.Shoot();
             }
 
             if (newKeyboardState.IsKeyDown(Keys.Left))
@@ -165,6 +164,7 @@ namespace SpaceInvaders
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            EntityManager.Update();
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
@@ -179,7 +179,7 @@ namespace SpaceInvaders
 
             Player.Draw();
             EnemyWall.Draw();
-
+            EntityManager.Draw(spriteBatch);
             spriteBatch.End();
 
             
