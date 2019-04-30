@@ -14,26 +14,38 @@ namespace SpaceInvaders
 
     public class Game1 : Game
     {
+        /// <summary>
+        /// For game objects
+        /// </summary>
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        private GameContent gameContent;
-        private TimeSpan gamePause;
+        public GameContent gameContent;
+        
+        /// <summary>
+        /// Gameplay objects
+        /// </summary>
         private EnemyWall EnemyWall;
-        private TimeSpan oldGameTime;
+        private Player Player;
+
+        /// <summary>
+        /// State objects
+        /// </summary>
         private int _screenWidth = 0;
         private int _screenHeight = 0;
         private MouseState oldMouseState;
         private KeyboardState oldKeyboardState;
-        private Player Player;
-        private Bullet Bullet;
-        private float bulletVelocity = 4;
+        
+
+        /// <summary>
+        /// Time Objects
+        /// </summary>
+        private TimeSpan oldGameTime;
+        private TimeSpan gamePause;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            //IsFixedTimeStep = false;
-            //TargetElapsedTime = TimeSpan.FromMilliseconds(200);
             
         }
 
@@ -60,23 +72,24 @@ namespace SpaceInvaders
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             gameContent = new GameContent(Content);
+
+            //Initialize Screen
             _screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             _screenWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             if (_screenWidth > 800)
                 _screenWidth = 800;
-            if (_screenHeight > 600                )
+            if (_screenHeight > 600)
                 _screenHeight = 600;
 
             graphics.PreferredBackBufferWidth = _screenWidth;
             graphics.PreferredBackBufferHeight = _screenHeight;
             graphics.ApplyChanges();
 
+            //Initialize gameplay objects
             EnemyWall = new EnemyWall(_screenWidth, 50, spriteBatch, gameContent);
 
-            int playerX = (_screenWidth - gameContent.imgPlayer.Width) / 2;
-            int playerY = _screenHeight - 100;
-            Player = new Player(playerX, playerY, _screenWidth, spriteBatch, gameContent);
-            Bullet = new Bullet(_screenWidth, _screenHeight, spriteBatch, gameContent);
+            
+            Player = new Player(_screenWidth, _screenHeight, spriteBatch, gameContent);
 
             // TODO: use this.Content to load your game content here
         }
@@ -97,12 +110,14 @@ namespace SpaceInvaders
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            //check for game active
             if (!IsActive)
             {
                 return;
             }
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+
 
             KeyboardState newKeyboardState = Keyboard.GetState();
             MouseState newMouseState = Mouse.GetState();
@@ -115,10 +130,10 @@ namespace SpaceInvaders
                 }
             }
 
-            if (newMouseState.LeftButton == ButtonState.Pressed &&
+            if (newMouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton != ButtonState.Pressed &&
                 oldMouseState.X == newMouseState.X && oldMouseState.Y == newMouseState.Y)
             {
-                Bullet.Shoot(newMouseState.X, newMouseState.Y, bulletVelocity, Player);
+
             }
 
             if (newKeyboardState.IsKeyDown(Keys.Left))
@@ -153,19 +168,18 @@ namespace SpaceInvaders
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
+
+            //moving enemyWall
             if(oldGameTime.TotalMilliseconds > gamePause.TotalMilliseconds)
             {
                 EnemyWall.Moving(gameContent);
                 oldGameTime = TimeSpan.FromMilliseconds(0);
             }
             oldGameTime += gameTime.ElapsedGameTime;
+
             Player.Draw();
             EnemyWall.Draw();
-            if (Bullet.Visible)
-            {
-                Bullet.Move();
-                Bullet.Draw();
-            }
+
             spriteBatch.End();
 
             

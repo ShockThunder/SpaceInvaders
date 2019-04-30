@@ -12,8 +12,8 @@ namespace SpaceInvaders
 {
     public class Bullet
     {
-        private float X;
-        private float Y;
+        public float X;
+        public float Y;
         private float Yvelocity;
         private float _width;
         private float _height;
@@ -23,9 +23,8 @@ namespace SpaceInvaders
         private GameContent gameContent;
 
         private float _screenWidth;
-        private float _screenHeight;
 
-        public Bullet(float screenWidth, float screenHeight, SpriteBatch spriteBatch, GameContent gameContent)
+        public Bullet(float screenWidth, SpriteBatch spriteBatch, GameContent gameContent)
         {
             this.spriteBatch = spriteBatch;
             this.gameContent = gameContent;
@@ -33,7 +32,7 @@ namespace SpaceInvaders
             _width = imgBullet.Width;
             _height = imgBullet.Height;
 
-            _screenHeight = screenHeight;
+
             _screenWidth = screenWidth;
             Visible = false;
         }
@@ -47,19 +46,19 @@ namespace SpaceInvaders
 
             
 
-            spriteBatch.Draw(imgBullet, new Vector2(X, Y), null, Color.White, 0,
+            spriteBatch.Draw(imgBullet, new Vector2(X + _width, Y), null, Color.White, 0,
                 new Vector2(_width, _height), 1.0f, SpriteEffects.None, 0);
         }
 
-        public void Shoot(float x, float y, float yvelocity, Player player)
+        /*public void Shoot(float yvelocity, Player player)
         {           
             
             Visible = true;
-            X = player.X;
-            Y = player.Y;
+            X = player._x;
+            Y = player._y;
             Yvelocity = yvelocity;
-
-        }
+            
+        }*/
 
         public bool Move()
         {

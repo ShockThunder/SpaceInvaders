@@ -31,8 +31,6 @@ namespace SpaceInvaders
             Enemies = new Enemy[enemyCountY, enemyCountX];
             float enemyX = X;
             float enemyY = Y;
-            Color color = Color.White;
-
             for (int i = 0; i < enemyCountY; i++)
             {
                 
@@ -41,7 +39,7 @@ namespace SpaceInvaders
                 for (int j = 0; j < enemyCountX; j++)
                 {
                     enemyX = X + j * 2 *gameContent.imgInvader.Width;
-                    Enemy enemy = new Enemy(enemyX, enemyY, color, spriteBatch, gameContent);
+                    Enemy enemy = new Enemy(enemyX, enemyY, spriteBatch, gameContent);
                     Enemies[i, j] = enemy;
                 }
             }

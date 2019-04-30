@@ -13,66 +13,76 @@ namespace SpaceInvaders
 {
     public class Player
     {
-        public float X { get; set; }
-        public float Y { get; set; }
-        public float Width { get; set; }
-        public float Height { get; set; }
-        public float ScreenWidth { get; set; }
+        private float _x { get; set; }
+        private float _y { get; set; }
+        private float _width { get; set; }
+        private float _height { get; set; }
+        private float _screenWidth { get; set; }
+        private float _screenHeight { get; set; }
 
-        private Texture2D imgPlayer { get; set; }
-        private SpriteBatch spriteBatch { get; set; }
+        private Texture2D _imgPlayer { get; set; }
+        private SpriteBatch _spriteBatch { get; set; }
+        private GameContent _gameContent { get; set; }
 
-        public Player(float x, float y, float screenWidth, SpriteBatch spriteBatch, GameContent gameContent)
+
+        public Player(float screenWidth, float screenHeight, SpriteBatch spriteBatch, GameContent gameContent)
         {
-            X = x;
-            Y = y;
-            imgPlayer = gameContent.imgPlayer;
-            Width = imgPlayer.Width;
-            Height = imgPlayer.Height;
-            this.spriteBatch = spriteBatch;
-            ScreenWidth = screenWidth;
+            _spriteBatch = spriteBatch;
+            _gameContent = gameContent;
+                    
+            _imgPlayer = _gameContent.imgPlayer;
+
+            _width = _imgPlayer.Width;
+            _height = _imgPlayer.Height;
+            
+            _screenWidth = screenWidth;
+            _screenHeight = screenHeight;
+
+            _x = (_screenWidth - gameContent.imgPlayer.Width) / 2;
+            _y = _screenHeight - 50;
         }
 
         public void Draw()
         {
-            spriteBatch.Draw(imgPlayer, new Vector2(X, Y), null, Color.White,
+            _spriteBatch.Draw(_imgPlayer, new Vector2(_x, _y), null, Color.White,
                 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0);
         }
 
         public void MoveLeft()
         {
-            X = X - 5;
-            if (X < 1)
-                X = 1;
+            _x -= 5;
+            if (_x < 1)
+                _x = 1;
         }
 
         public void MoveRight()
         {
-            X = X + 5;
-            if ((X + Width) > ScreenWidth)
-                X = ScreenWidth - Width;
+            _x += 5;
+            if ((_x + _width) > _screenWidth)
+                _x = _screenWidth - _width;
         }
 
         public void MoveTo(float x)
         {
             if (x >= 0)
             {
-                if (x < ScreenWidth - Width)
+                if (x < _screenWidth - _width)
                 {
-                    X = x;
+                    _x = x;
                 }
                 else
                 {
-                    X = ScreenWidth - Width;
+                    _x = _screenWidth - _width;
                 }
             }
             else
             {
                 if (x < 0)
                 {
-                    X = 0;
+                    _x = 0;
                 }
             }
         }
+
     }
 }

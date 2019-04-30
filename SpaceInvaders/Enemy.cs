@@ -22,11 +22,12 @@ namespace SpaceInvaders
 
         public float _width { get; set; }
         public float _height { get; set; }
-        private Color _color { get; set; }
+
+        private Color _color = Color.White;
         private SpriteBatch _spriteBatch;
         private Texture2D _imgInvader { get; set; }
 
-        public Enemy(float x, float y, Color color, SpriteBatch spriteBatch, GameContent gameContent)
+        public Enemy(float x, float y, SpriteBatch spriteBatch, GameContent gameContent)
         {
             _spriteBatch = spriteBatch;
             _imgInvader = gameContent.imgInvader;
@@ -35,7 +36,6 @@ namespace SpaceInvaders
             _width = gameContent.imgInvader.Width;
             _height = gameContent.imgInvader.Height;
             _isAlive = true;
-            _color = color;
             
 
         }
