@@ -51,7 +51,11 @@ namespace SpaceInvaders
             {
                 for (int j = 0; j < enemyCountX; j++)
                 {
-                    Enemies[i, j].Draw();
+                    if (Enemies[i, j].IsAlive() == true)
+                    {
+                        Enemies[i, j].Draw();
+                    }
+                    
                 }
             }
         }
@@ -119,7 +123,7 @@ namespace SpaceInvaders
             }
         }
 
-        private float GetLowestY()
+        public float GetLowestY()
         {
             float y = 0;
             foreach (var Enemy in Enemies)
@@ -130,16 +134,27 @@ namespace SpaceInvaders
             return y;
         }
 
-        private float FindLeftInvader()
+        public float GetHighestY()
         {
-            int x = enemyCountX;
-            int y = enemyCountY;
+            float y = 600;
+            foreach (var Enemy in Enemies)
+            {
+                if (Enemy.GetY() < y)
+                    y = Enemy.GetY();
+            }
+            return y;
+        }
+
+        public float FindLeftInvader()
+        {
+            int x = enemyCountY;
+            int y = enemyCountX;
 
             for (int i = 0; i < enemyCountY; i++)
             {
                 for (int j = 0; j < enemyCountX; j++)
                 {
-                    if (Enemies[i,j].IsAlive() && j < x)
+                    if (Enemies[i,j].IsAlive() && j < y)
                     {
                         x = i;
                         y = j;
@@ -150,7 +165,7 @@ namespace SpaceInvaders
             return Enemies[x, y].GetX();
         }
 
-        private float FindRightInvader()
+        public float FindRightInvader()
         {
             int x = 0;
             int y = 0;
@@ -159,7 +174,7 @@ namespace SpaceInvaders
             {
                 for (int j = 0; j < enemyCountX; j++)
                 {
-                    if (Enemies[i, j].IsAlive() && j > x)
+                    if (Enemies[i, j].IsAlive() && j > y)
                     {
                         x = i;
                         y = j;
@@ -168,6 +183,11 @@ namespace SpaceInvaders
             }
 
             return Enemies[x, y].GetX();
+        }
+
+        public Enemy GetEnemy(int i, int j)
+        {
+            return Enemies[i, j];
         }
     }
 }

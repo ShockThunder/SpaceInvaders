@@ -14,43 +14,153 @@ namespace SpaceInvaders
 {
     static class EntityManager
     {
-        static List<Bullet> entities = new List<Bullet>();
+        static List<Bullet> bulletsFirst = new List<Bullet>();
 
-        static bool isUpdating;
-        static List<Bullet> addedEntities = new List<Bullet>();
+        static bool useFirst = true;
+        static List<Bullet> bulletsSecond = new List<Bullet>();
 
-        public static int Count { get { return entities.Count; } }
+        public static int Count { get { return bulletsFirst.Count; } }
 
         public static void Add(Bullet entity)
         {
-            if (!isUpdating)
-                entities.Add(entity);
+            if (useFirst)
+            {
+                bulletsFirst.Add(entity);
+
+                if (bulletsFirst.Count > 30)
+                {
+                    foreach (var bullet in bulletsFirst)
+                    {
+                        if (bullet.visible == true)
+                        {
+                            bulletsSecond.Add(bullet);
+                        }
+                    }
+
+                    bulletsFirst.Clear();
+                    useFirst = false;
+                }
+            }
+
             else
-                addedEntities.Add(entity);
+            {
+                bulletsSecond.Add(entity);
+
+                if (bulletsSecond.Count > 30)
+                {
+                    foreach (var bullet in bulletsSecond)
+                    {
+                        if (bullet.visible == true)
+                        {
+                            bulletsFirst.Add(bullet);
+                        }
+                    }
+
+                    bulletsSecond.Clear();
+                    useFirst = true;
+                }
+            }
+
+
         }
 
         public static void Update()
         {
-            isUpdating = true;
+            if (useFirst == true)
+            {
+                foreach (var entity in bulletsFirst)
+                    entity.Update();
+            }
+            else
+            {
+                foreach (var entity in bulletsSecond)
+                    entity.Update();
+            }
 
-            foreach (var entity in entities)
-                entity.Update();
-
-            isUpdating = false;
-
-            foreach (var entity in addedEntities)
-                entities.Add(entity);
-
-            addedEntities.Clear();
-
-            // remove any expired entities.
-            entities = entities.Where(x => x.visible == true).ToList();
         }
 
         public static void Draw(SpriteBatch spriteBatch)
         {
-            foreach (var entity in entities)
-                entity.Draw();
+            if (useFirst == true)
+            {
+                foreach (var entity in bulletsFirst)
+                    entity.Draw();
+            }
+            else
+            {
+                foreach (var entity in bulletsSecond)
+                    entity.Draw();
+            }
+
+
+        }
+
+        public static void HitCheck(EnemyWall enemyWall)
+        {
+            float left = enemyWall.FindLeftInvader();
+            float right = enemyWall.FindRightInvader();
+            float top = enemyWall.GetHighestY();
+            float bot = enemyWall.GetLowestY();
+
+            if (useFirst == true)
+            {
+                for (int i = 0; i < enemyWall.enemyCountY; i++)
+                {
+                    for (int j = 0; j < enemyWall.enemyCountX; j++)
+                    {
+                        Enemy currEnemy = enemyWall.GetEnemy(i, j);
+                        if (currEnemy.IsAlive())
+                        {
+                            Rectangle rectE = new Rectangle((int)currEnemy.GetX(), (int)currEnemy.GetY(), (int)currEnemy._width, (int)currEnemy._height);
+                            foreach (var bullet in bulletsFirst)
+                            {
+                                if (bullet.X > left && bullet.X < right
+                                   && bullet.Y > top && bullet.Y < bot && bullet.visible)
+                                {
+                                    Rectangle rectB = new Rectangle((int)bullet.X, (int)bullet.Y, (int)bullet._width, (int)bullet._height);
+                                    if (rectE.Intersects(rectB))
+                                    {
+                                        currEnemy.Kill();
+                                        bullet.visible = false;
+                                    }
+
+                                }
+                            }
+                        }
+                            
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < enemyWall.enemyCountY; i++)
+                {
+                    for (int j = 0; j < enemyWall.enemyCountX; j++)
+                    {
+                        Enemy currEnemy = enemyWall.GetEnemy(i, j);
+                        if (currEnemy.IsAlive())
+                        {
+                            Rectangle rectE = new Rectangle((int)currEnemy.GetX(), (int)currEnemy.GetY(), (int)currEnemy._width, (int)currEnemy._height);
+                            foreach (var bullet in bulletsSecond)
+                            {
+                                if (bullet.X > left && bullet.X < right
+                                   && bullet.Y > top && bullet.Y < bot && bullet.visible)
+                                {
+                                    Rectangle rectB = new Rectangle((int)bullet.X, (int)bullet.Y, (int)bullet._width, (int)bullet._height);
+                                    if (rectE.Intersects(rectB))
+                                    {
+                                        currEnemy.Kill();
+                                        bullet.visible = false;
+                                    }
+
+                                }
+                            }
+                        }
+                        
+                    }
+                }
+            }
+            
         }
     }
 }

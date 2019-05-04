@@ -15,8 +15,8 @@ namespace SpaceInvaders
         public float X;
         public float Y;
         private float Yvelocity = 3;
-        private float _width;
-        private float _height;
+        public float _width;
+        public float _height;
         public bool visible { get; set; }
         private Texture2D _imgBullet { get; set; }
         private SpriteBatch _spriteBatch { get; set; }
@@ -63,6 +63,8 @@ namespace SpaceInvaders
         public void Update()
         {
             Y -= Yvelocity;
+            if (Y <= 0)
+                visible = false;
         }
     }
 }

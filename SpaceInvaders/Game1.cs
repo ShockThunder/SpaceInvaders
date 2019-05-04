@@ -165,6 +165,7 @@ namespace SpaceInvaders
         protected override void Draw(GameTime gameTime)
         {
             EntityManager.Update();
+            EntityManager.HitCheck(EnemyWall);
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
