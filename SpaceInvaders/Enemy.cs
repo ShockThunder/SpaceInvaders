@@ -7,58 +7,63 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace SpaceInvaders
 {
-    /// <summary>
-    /// This is the main type for your game.
-    /// </summary>
-
     public class Enemy
     {
-        private float _x { get; set; }
-        private float _y { get; set; }
-        private bool _isAlive { get; set; }
+        private float _x;
+        private float _y;
 
-        public float _width { get; set; }
-        public float _height { get; set; }
+        private int _width;
+        private int _height;
 
-        private Color _color = Color.White;
+        private int _screenWidth;
+        private int _screenHeight;
+
         private SpriteBatch _spriteBatch;
-        private Texture2D _imgInvader { get; set; }
+        private GameContent _gameContent;
+
+        private bool _isAlive = true;
 
         public Enemy(float x, float y, SpriteBatch spriteBatch, GameContent gameContent)
         {
-            _spriteBatch = spriteBatch;
-            _imgInvader = gameContent.imgInvader;
             _x = x;
             _y = y;
-            _width = gameContent.imgInvader.Width;
-            _height = gameContent.imgInvader.Height;
-            _isAlive = true;
-            
+            _spriteBatch = spriteBatch;
+            _gameContent = gameContent;
+            _width = _gameContent.imgInvader.Width;
+            _height = _gameContent.imgInvader.Height;
+        }
+
+        public void Update()
+        {
 
         }
 
         public void Draw()
         {
-            if (_isAlive)
-            {
-                _spriteBatch.Draw(_imgInvader, new Vector2(_x, _y), null,
-                    _color, 0, new Vector2(0,0), 1.0f, SpriteEffects.None, 0);
-            }
+            _spriteBatch.Draw(_gameContent.imgInvader, new Rectangle((int)_x, (int)_y, _width, _height), Color.White);
         }
 
-        public void SetX(float x)
+        public void Kill()
         {
-            this._x = x;
+            _isAlive = false;
         }
 
-        public void SetY(float y)
+        public bool CheckAlive()
         {
-            this._y = y;
+            return _isAlive;
         }
 
+        public Rectangle GetRectangle()
+        {
+            return new Rectangle((int)_x, (int)_y, _width, _height);
+        }
+
+
+        #region PositionMethods
         public float GetX()
         {
             return _x;
@@ -69,14 +74,21 @@ namespace SpaceInvaders
             return _y;
         }
 
-        public bool IsAlive()
+        public void SetX(float x)
         {
-            return _isAlive;
+            _x = x;
         }
 
-        public void Kill()
+        public void SetY(float y)
         {
-            this._isAlive = false;
+            _y = y;
         }
+
+        public void SetPosition(float x, float y)
+        {
+            _x = x;
+            _y = y;
+        }
+        #endregion
     }
 }

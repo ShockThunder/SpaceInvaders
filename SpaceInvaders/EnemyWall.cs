@@ -7,103 +7,156 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace SpaceInvaders
 {
     public class EnemyWall
     {
-        private Enemy[,] Enemies { get; set; }
-        public int enemyCountX { get; set; }
-        public int enemyCountY { get; set; }
-        private float X;
-        private float Y;
+        private int _enemyCountX = 15;
+        private int _enemyCountY = 3;
 
+        private float _initialX;
+        private float _initialY;
 
-        //в конструктор передается ширина экрана для расчета координат отрисовки, чтобы все враги были по центру.
-        public EnemyWall(float x, float y, SpriteBatch spriteBatch, GameContent gameContent)
+        private int _screenWidth;
+        private int _screenHeight;
+
+        private SpriteBatch _spriteBatch;
+        private GameContent _gameContent;
+
+        private List<Enemy> Enemies = new List<Enemy>();
+        private int _enemyWidth;
+        private int _enemyHeight;
+
+        private bool _moveLeft = true;
+
+        public EnemyWall(int screenWidth, int screenHeight, SpriteBatch spriteBatch, GameContent gameContent)
+        {
+            _screenWidth = screenWidth;
+            _screenHeight = screenHeight;
+            _spriteBatch = spriteBatch;
+            _gameContent = gameContent;
+
+            _enemyWidth = gameContent.imgInvader.Width + 10;
+            _enemyHeight = gameContent.imgInvader.Height + 10;
+            _initialY = 50;
+            _initialX = _screenWidth / 2 - ((_enemyCountX + 1)* _enemyWidth) / 2;
+
+            FillEnemies();
+        }
+
+        public void Update()
         {
 
-            enemyCountX = 20;
-            enemyCountY = 5;
-            X = x/2 - gameContent.imgInvader.Width * (enemyCountX - 1);
-            Y = y;
-            
-            Enemies = new Enemy[enemyCountY, enemyCountX];
-            float enemyX = X;
-            float enemyY = Y;
-            for (int i = 0; i < enemyCountY; i++)
-            {
-                
-                enemyY = Y + i * 2*gameContent.imgInvader.Height;
-
-                for (int j = 0; j < enemyCountX; j++)
-                {
-                    enemyX = X + j * 2 *gameContent.imgInvader.Width;
-                    Enemy enemy = new Enemy(enemyX, enemyY, spriteBatch, gameContent);
-                    Enemies[i, j] = enemy;
-                }
-            }
         }
 
         public void Draw()
         {
-            for (int i = 0; i < enemyCountY; i++)
+            foreach (var Enemy in Enemies)
             {
-                for (int j = 0; j < enemyCountX; j++)
+                if (Enemy.CheckAlive())
                 {
-                    if (Enemies[i, j].IsAlive() == true)
-                    {
-                        Enemies[i, j].Draw();
-                    }
-                    
+                    Enemy.Draw();
                 }
             }
         }
 
-        bool leftWay = true;
-        public void Moving(GameContent gameContent)
+        #region SearchPositionMethods
+        public Enemy GetLeftInvader()
         {
-            
-            if(GetLowestY() <550)
+            foreach (var Enemy in Enemies)
             {
-                if (leftWay)
-                {
-                    if (FindLeftInvader() >= 10)
-                    {
-                        MoveLeft();                        
-                    }
-                    else
-                    {
-                        MoveDown();
-                        leftWay = false;
-                    }
-                    
-                }
-                else
-                {
-                    if (FindRightInvader() + gameContent.imgInvader.Width <= 790)
-                    {
-                        MoveRight();
-                        return;
-                    }
-                    else
-                    {
-                        MoveDown();
-                        leftWay = true;
-                    }
-                    
-                }
-                
+                if (Enemy.GetX() <= GetLeftX())
+                    return Enemy;
             }
-            
+            return null;
+        }
+
+        public Enemy GetRightInvader()
+        {
+            foreach (var Enemy in Enemies)
+            {
+                if (Enemy.GetX() >= GetRightX())
+                    return Enemy;
+            }
+            return null;
+        }
+
+        public float GetHighestY()
+        {
+            float highY = 600; 
+            foreach (var Enemy in Enemies)
+            {
+                if (Enemy.GetY() < highY)
+                    highY = Enemy.GetY();
+            }
+
+            return highY;
+        }
+
+        public float GetLowestY()
+        {
+            float lowY = 0;
+            foreach (var Enemy in Enemies)
+            {
+                if (Enemy.GetY() > lowY)
+                    lowY = Enemy.GetY();
+            }
+
+            return lowY;
+        }
+
+        public float GetLeftX()
+        {
+            float leftX = 800;
+            foreach (var Enemy in Enemies)
+            {
+                if (Enemy.GetX() < leftX)
+                    leftX = Enemy.GetX();
+            }
+            return leftX;
+        }
+        public float GetRightX()
+        {
+            float rightX = 0;
+            foreach (var Enemy in Enemies)
+            {
+                if (Enemy.GetX() > rightX)
+                    rightX = Enemy.GetX();
+            }
+            return rightX;
+        }
+        #endregion
+
+        #region MovingMethods
+        public void Moving()
+        {
+            if (_moveLeft)
+            {
+                MoveLeft();
+                if(GetLeftX() <= 10)
+                {
+                    _moveLeft = false;
+                    MoveDown();
+                }
+            }
+            else
+            {
+                MoveRight();
+                if (GetRightX() >= _screenWidth - 10)
+                {
+                    _moveLeft = true;
+                    MoveDown();
+                }
+            }
         }
 
         private void MoveLeft()
         {
-            
             foreach (var Enemy in Enemies)
             {
-                Enemy.SetX(Enemy.GetX() - Enemy._width);
+                Enemy.SetX(Enemy.GetX() - 1);
             }
         }
 
@@ -111,7 +164,7 @@ namespace SpaceInvaders
         {
             foreach (var Enemy in Enemies)
             {
-                Enemy.SetX(Enemy.GetX() + Enemy._width);
+                Enemy.SetX(Enemy.GetX() + 1);
             }
         }
 
@@ -119,75 +172,28 @@ namespace SpaceInvaders
         {
             foreach (var Enemy in Enemies)
             {
-                Enemy.SetY(Enemy.GetY() + Enemy._height);
+                Enemy.SetY(Enemy.GetY() + 10);
             }
         }
+        #endregion
 
-        public float GetLowestY()
+        private void FillEnemies()
         {
-            float y = 0;
-            foreach (var Enemy in Enemies)
+            float eX = _initialX;
+            float eY = _initialY;
+            for (int i = 0; i < _enemyCountY; i++)
             {
-                if (Enemy.GetY() > y)
-                    y = Enemy.GetY();
-            }
-            return y;
-        }
+                eY += _enemyHeight;
+                eX = _initialX;
 
-        public float GetHighestY()
-        {
-            float y = 600;
-            foreach (var Enemy in Enemies)
-            {
-                if (Enemy.GetY() < y)
-                    y = Enemy.GetY();
-            }
-            return y;
-        }
-
-        public float FindLeftInvader()
-        {
-            int x = enemyCountY;
-            int y = enemyCountX;
-
-            for (int i = 0; i < enemyCountY; i++)
-            {
-                for (int j = 0; j < enemyCountX; j++)
+                for (int j = 0; j < _enemyCountX; j++)
                 {
-                    if (Enemies[i,j].IsAlive() && j < y)
-                    {
-                        x = i;
-                        y = j;
-                    }
+                    eX += _enemyWidth;
+                    Enemy tempEnemy = new Enemy(eX, eY, _spriteBatch, _gameContent);
+                    Enemies.Add(tempEnemy);
                 }
             }
-
-            return Enemies[x, y].GetX();
         }
 
-        public float FindRightInvader()
-        {
-            int x = 0;
-            int y = 0;
-
-            for (int i = 0; i < enemyCountY; i++)
-            {
-                for (int j = 0; j < enemyCountX; j++)
-                {
-                    if (Enemies[i, j].IsAlive() && j > y)
-                    {
-                        x = i;
-                        y = j;
-                    }
-                }
-            }
-
-            return Enemies[x, y].GetX();
-        }
-
-        public Enemy GetEnemy(int i, int j)
-        {
-            return Enemies[i, j];
-        }
     }
 }

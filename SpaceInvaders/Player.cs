@@ -8,89 +8,58 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
 namespace SpaceInvaders
 {
     public class Player
     {
-        private float _x { get; set; }
-        private float _y { get; set; }
-        private float _width { get; set; }
-        private float _height { get; set; }
-        private float _screenWidth { get; set; }
-        private float _screenHeight { get; set; }
+        private float _x;
+        private float _y;
 
-        private Texture2D _imgPlayer { get; set; }
-        private SpriteBatch _spriteBatch { get; set; }
-        private GameContent _gameContent { get; set; }
+        private int _width;
+        private int _height;
 
-        private Bullet[] _bullets { get; set; }
+        private int _screenWidth;
+        private int _screenHeight;
 
+        private SpriteBatch _spriteBatch;
+        private GameContent _gameContent;
 
-        public Player(float screenWidth, float screenHeight, SpriteBatch spriteBatch, GameContent gameContent)
+        private bool _isAlive = true;
+        public Player(int screenWidth, int screenHeight, SpriteBatch spriteBatch, GameContent gameContent)
         {
+            _screenHeight = screenHeight;
+            _screenWidth = screenWidth;
             _spriteBatch = spriteBatch;
             _gameContent = gameContent;
-                    
-            _imgPlayer = _gameContent.imgPlayer;
-
-            _width = _imgPlayer.Width;
-            _height = _imgPlayer.Height;
-            
-            _screenWidth = screenWidth;
-            _screenHeight = screenHeight;
-
-            _x = (_screenWidth - gameContent.imgPlayer.Width) / 2;
+            _x = _screenWidth / 2;
             _y = _screenHeight - 50;
+            _width = _gameContent.imgPlayer.Width;
+            _height = _gameContent.imgPlayer.Height;
+        }
+
+        public void MovePlayer(float x)
+        {
+            if (x > _screenWidth)
+                _x = _screenWidth - _width;
+            else if (x < 0)
+                _x = 0;
+            else
+            _x = x;
         }
 
         public void Draw()
         {
-            _spriteBatch.Draw(_imgPlayer, new Vector2(_x, _y), null, Color.White,
-                0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0);
+            _spriteBatch.Draw(_gameContent.imgPlayer, new Rectangle((int)_x, (int)_y, _width, _height), Color.White);
         }
 
-        public void MoveLeft()
+        public void Update()
         {
-            _x -= 5;
-            if (_x < 1)
-                _x = 1;
+
         }
 
-        public void MoveRight()
+        public bool CheckAlive()
         {
-            _x += 5;
-            if ((_x + _width) > _screenWidth)
-                _x = _screenWidth - _width;
+            return _isAlive;
         }
-
-        public void MoveTo(float x)
-        {
-            if (x >= 0)
-            {
-                if (x < _screenWidth - _width)
-                {
-                    _x = x;
-                }
-                else
-                {
-                    _x = _screenWidth - _width;
-                }
-            }
-            else
-            {
-                if (x < 0)
-                {
-                    _x = 0;
-                }
-            }
-        }
-        
-        public void Shoot()
-        {
-            EntityManager.Add(new Bullet(this._x, this._y, _spriteBatch, _gameContent));
-            
-        }
-
     }
 }

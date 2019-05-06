@@ -20,13 +20,12 @@ namespace SpaceInvaders
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public GameContent gameContent;
-        
+        Rectangle mainFrame;
         /// <summary>
         /// Gameplay objects
         /// </summary>
-        private EnemyWall EnemyWall;
-        private Player Player;
-
+        Player player;
+        EnemyWall enemyWall;
         /// <summary>
         /// State objects
         /// </summary>
@@ -86,10 +85,13 @@ namespace SpaceInvaders
             graphics.ApplyChanges();
 
             //Initialize gameplay objects
-            EnemyWall = new EnemyWall(_screenWidth, 50, spriteBatch, gameContent);
+            player = new Player(_screenWidth, _screenHeight, spriteBatch, gameContent);
+            enemyWall = new EnemyWall(_screenWidth, _screenHeight, spriteBatch, gameContent);
 
-            
-            Player = new Player(_screenWidth, _screenHeight, spriteBatch, gameContent);
+            mainFrame = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
+
+
+
 
             // TODO: use this.Content to load your game content here
         }
@@ -126,23 +128,23 @@ namespace SpaceInvaders
             {
                 if (newMouseState.X >= 0 || newMouseState.X < _screenWidth)
                 {
-                    Player.MoveTo(newMouseState.X);
+                    player.MovePlayer(newMouseState.X);
                 }
             }
 
             if (newMouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton != ButtonState.Pressed)
             {
-                Player.Shoot();
+                
             }
 
             if (newKeyboardState.IsKeyDown(Keys.Left))
             {
-                Player.MoveLeft();
+                
             }
 
             if (newKeyboardState.IsKeyDown(Keys.Right))
             {
-                Player.MoveRight();
+                
             }
 
             if (oldKeyboardState.IsKeyUp(Keys.Space) && newKeyboardState.IsKeyDown(Keys.Space))
@@ -153,6 +155,7 @@ namespace SpaceInvaders
             oldMouseState = newMouseState;
             oldKeyboardState = newKeyboardState;
 
+            enemyWall.Moving();
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -163,24 +166,14 @@ namespace SpaceInvaders
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
-        {
-            EntityManager.Update();
-            EntityManager.HitCheck(EnemyWall);
+        {           
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-
-            //moving enemyWall
-            if(oldGameTime.TotalMilliseconds > gamePause.TotalMilliseconds)
-            {
-                EnemyWall.Moving(gameContent);
-                oldGameTime = TimeSpan.FromMilliseconds(0);
-            }
-            oldGameTime += gameTime.ElapsedGameTime;
-
-            Player.Draw();
-            EnemyWall.Draw();
-            EntityManager.Draw(spriteBatch);
+            spriteBatch.Draw(gameContent.imgBackground, mainFrame, Color.White);
+            player.Draw();
+            enemyWall.Draw();
+            
             spriteBatch.End();
 
             
