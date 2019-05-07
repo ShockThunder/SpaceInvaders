@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace SpaceInvaders
 {
-    public class Enemy
+    public class Bullet
     {
         private float _x;
         private float _y;
@@ -19,15 +19,13 @@ namespace SpaceInvaders
         private int _width;
         private int _height;
 
-        //private int _screenWidth;
-        //private int _screenHeight;
-
         private SpriteBatch _spriteBatch;
         private GameContent _gameContent;
 
         private bool _isAlive = true;
+        private int _yVelocity = -3;
 
-        public Enemy(float x, float y, SpriteBatch spriteBatch, GameContent gameContent)
+        public Bullet(float x, float y, SpriteBatch spriteBatch, GameContent gameContent)
         {
             _x = x;
             _y = y;
@@ -39,12 +37,18 @@ namespace SpaceInvaders
 
         public void Update()
         {
+            Moving();
 
+            if (GetY() < 0)
+            {
+                Kill();
+            }
         }
 
         public void Draw()
         {
-            _spriteBatch.Draw(_gameContent.imgInvader, new Rectangle((int)_x, (int)_y, _width, _height), Color.White);
+            if (CheckAlive())
+            _spriteBatch.Draw(_gameContent.imgBullet, new Rectangle((int)_x, (int)_y, _width, _height), Color.White);
         }
 
         public void Kill()
@@ -62,11 +66,9 @@ namespace SpaceInvaders
             return new Rectangle((int)_x, (int)_y, _width, _height);
         }
 
-
-        #region PositionMethods
-        public float GetX()
+        private void Moving()
         {
-            return _x;
+            _y += _yVelocity;
         }
 
         public float GetY()
@@ -74,21 +76,9 @@ namespace SpaceInvaders
             return _y;
         }
 
-        public void SetX(float x)
+        public float GetX()
         {
-            _x = x;
+            return _x;
         }
-
-        public void SetY(float y)
-        {
-            _y = y;
-        }
-
-        public void SetPosition(float x, float y)
-        {
-            _x = x;
-            _y = y;
-        }
-        #endregion
     }
 }

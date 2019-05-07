@@ -48,7 +48,7 @@ namespace SpaceInvaders
 
         public void Update()
         {
-
+            Moving();
         }
 
         public void Draw()
@@ -67,7 +67,7 @@ namespace SpaceInvaders
         {
             foreach (var Enemy in Enemies)
             {
-                if (Enemy.GetX() <= GetLeftX())
+                if (Enemy.GetX() <= GetLeftX() && Enemy.CheckAlive())
                     return Enemy;
             }
             return null;
@@ -77,7 +77,7 @@ namespace SpaceInvaders
         {
             foreach (var Enemy in Enemies)
             {
-                if (Enemy.GetX() >= GetRightX())
+                if (Enemy.GetX() >= GetRightX() && Enemy.CheckAlive())
                     return Enemy;
             }
             return null;
@@ -88,7 +88,7 @@ namespace SpaceInvaders
             float highY = 600; 
             foreach (var Enemy in Enemies)
             {
-                if (Enemy.GetY() < highY)
+                if (Enemy.GetY() < highY && Enemy.CheckAlive())
                     highY = Enemy.GetY();
             }
 
@@ -100,7 +100,7 @@ namespace SpaceInvaders
             float lowY = 0;
             foreach (var Enemy in Enemies)
             {
-                if (Enemy.GetY() > lowY)
+                if (Enemy.GetY() > lowY && Enemy.CheckAlive())
                     lowY = Enemy.GetY();
             }
 
@@ -112,7 +112,7 @@ namespace SpaceInvaders
             float leftX = 800;
             foreach (var Enemy in Enemies)
             {
-                if (Enemy.GetX() < leftX)
+                if (Enemy.GetX() < leftX && Enemy.CheckAlive())
                     leftX = Enemy.GetX();
             }
             return leftX;
@@ -122,7 +122,7 @@ namespace SpaceInvaders
             float rightX = 0;
             foreach (var Enemy in Enemies)
             {
-                if (Enemy.GetX() > rightX)
+                if (Enemy.GetX() > rightX && Enemy.CheckAlive())
                     rightX = Enemy.GetX();
             }
             return rightX;
@@ -195,5 +195,18 @@ namespace SpaceInvaders
             }
         }
 
+        public int GetEnemiesX()
+        {
+            return _enemyCountX;
+        }
+        public int GetEnemiesY()
+        {
+            return _enemyCountY;
+        }
+
+        public List<Enemy> GetEnemies()
+        {
+            return Enemies;
+        }
     }
 }

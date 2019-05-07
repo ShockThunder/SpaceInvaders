@@ -26,6 +26,7 @@ namespace SpaceInvaders
         /// </summary>
         Player player;
         EnemyWall enemyWall;
+        BulletManager bulletManager;
         /// <summary>
         /// State objects
         /// </summary>
@@ -87,6 +88,7 @@ namespace SpaceInvaders
             //Initialize gameplay objects
             player = new Player(_screenWidth, _screenHeight, spriteBatch, gameContent);
             enemyWall = new EnemyWall(_screenWidth, _screenHeight, spriteBatch, gameContent);
+            bulletManager = new BulletManager(_screenWidth, _screenHeight, enemyWall, spriteBatch, gameContent);
 
             mainFrame = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
@@ -134,7 +136,7 @@ namespace SpaceInvaders
 
             if (newMouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton != ButtonState.Pressed)
             {
-                
+                bulletManager.Shoot(player.GetX(), player.GetY());
             }
 
             if (newKeyboardState.IsKeyDown(Keys.Left))
@@ -155,7 +157,8 @@ namespace SpaceInvaders
             oldMouseState = newMouseState;
             oldKeyboardState = newKeyboardState;
 
-            enemyWall.Moving();
+            enemyWall.Update();
+            bulletManager.Update();
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -170,10 +173,12 @@ namespace SpaceInvaders
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
+
             spriteBatch.Draw(gameContent.imgBackground, mainFrame, Color.White);
             player.Draw();
             enemyWall.Draw();
-            
+            bulletManager.Draw();
+
             spriteBatch.End();
 
             

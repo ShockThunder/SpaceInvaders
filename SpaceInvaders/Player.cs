@@ -61,5 +61,15 @@ namespace SpaceInvaders
         {
             return _isAlive;
         }
+
+        public float GetX()
+        {
+            return _x;
+        }
+
+        public float GetY()
+        {
+            return _y;
+        }
     }
 }
