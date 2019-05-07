@@ -80,10 +80,10 @@ namespace SpaceInvaders
 
         private void CheckHit()
         {
-            float left = _enemyWall.GetLeftInvader().GetX();
+            /*float left = _enemyWall.GetLeftInvader().GetX();
             float right = _enemyWall.GetRightInvader().GetX() + _gameContent.imgInvader.Width;
             float top = _enemyWall.GetHighestY();
-            float bot = _enemyWall.GetLowestY();
+            float bot = _enemyWall.GetLowestY();*/
             List<Enemy> enemies = _enemyWall.GetEnemies();
 
 
@@ -93,7 +93,8 @@ namespace SpaceInvaders
                 {
                     foreach (var Bullet in Bullets)
                     {
-                        if (Bullet.GetX() <= right && Bullet.GetX() >= left && Bullet.GetY() >= top && Bullet.GetY() <= bot && Bullet.CheckAlive())
+                        if (Bullet.CheckAlive())
+                            //if (Bullet.GetX() <= right && Bullet.GetX() >= left && Bullet.GetY() >= top && Bullet.GetY() <= bot && Bullet.CheckAlive())
                         {
                             if(Intersect(Enemy, Bullet))
                             {

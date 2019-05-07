@@ -44,6 +44,7 @@ namespace SpaceInvaders
 
         public void Draw()
         {
+            if(CheckAlive())
             _spriteBatch.Draw(_gameContent.imgInvader, new Rectangle((int)_x, (int)_y, _width, _height), Color.White);
         }
 
