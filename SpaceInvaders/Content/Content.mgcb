@@ -37,6 +37,13 @@
 /processorParam:TextureFormat=Color
 /build:Bullet.png
 
+#begin GameText.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:GameText.spritefont
+
 #begin Invader.png
 /importer:TextureImporter
 /processor:TextureProcessor

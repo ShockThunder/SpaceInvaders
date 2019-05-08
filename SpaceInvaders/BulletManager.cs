@@ -16,15 +16,13 @@ namespace SpaceInvaders
         public List<Bullet> Bullets = new List<Bullet>();
         public List<Bullet> tempBullets = new List<Bullet>();
         private EnemyWall _enemyWall;
-        private int _screenWidth;
-        private int _screenHeight;
+
 
         private SpriteBatch _spriteBatch;
         private GameContent _gameContent;
-        public BulletManager(int screenWidth, int screenHeight, EnemyWall enemyWall, SpriteBatch spriteBatch, GameContent gameContent)
+        public BulletManager(EnemyWall enemyWall, SpriteBatch spriteBatch, GameContent gameContent)
         {
-            _screenWidth = screenWidth;
-            _screenHeight = screenHeight;
+
             _spriteBatch = spriteBatch;
             _gameContent = gameContent;
 
@@ -80,10 +78,7 @@ namespace SpaceInvaders
 
         private void CheckHit()
         {
-            /*float left = _enemyWall.GetLeftInvader().GetX();
-            float right = _enemyWall.GetRightInvader().GetX() + _gameContent.imgInvader.Width;
-            float top = _enemyWall.GetHighestY();
-            float bot = _enemyWall.GetLowestY();*/
+            
             List<Enemy> enemies = _enemyWall.GetEnemies();
 
 
@@ -94,7 +89,6 @@ namespace SpaceInvaders
                     foreach (var Bullet in Bullets)
                     {
                         if (Bullet.CheckAlive())
-                            //if (Bullet.GetX() <= right && Bullet.GetX() >= left && Bullet.GetY() >= top && Bullet.GetY() <= bot && Bullet.CheckAlive())
                         {
                             if(Intersect(Enemy, Bullet))
                             {

@@ -31,8 +31,8 @@ namespace SpaceInvaders
             _y = y;
             _spriteBatch = spriteBatch;
             _gameContent = gameContent;
-            _width = _gameContent.imgInvader.Width;
-            _height = _gameContent.imgInvader.Height;
+            _width = _gameContent.imgBullet.Width;
+            _height = _gameContent.imgBullet.Height;
         }
 
         public void Update()

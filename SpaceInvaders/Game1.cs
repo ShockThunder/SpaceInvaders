@@ -19,7 +19,8 @@ namespace SpaceInvaders
         /// </summary>
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        public GameContent gameContent;
+        GameContent gameContent;
+        SpriteFont font;
         Rectangle mainFrame;
         /// <summary>
         /// Gameplay objects
@@ -72,6 +73,7 @@ namespace SpaceInvaders
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             gameContent = new GameContent(Content);
+            font = gameContent.font;
 
             //Initialize Screen
             _screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
@@ -88,7 +90,7 @@ namespace SpaceInvaders
             //Initialize gameplay objects
             player = new Player(_screenWidth, _screenHeight, spriteBatch, gameContent);
             enemyWall = new EnemyWall(_screenWidth, _screenHeight, spriteBatch, gameContent);
-            bulletManager = new BulletManager(_screenWidth, _screenHeight, enemyWall, spriteBatch, gameContent);
+            bulletManager = new BulletManager(enemyWall, spriteBatch, gameContent);
 
             mainFrame = new Rectangle(0, 0, GraphicsDevice.Viewport.Width, GraphicsDevice.Viewport.Height);
 
@@ -122,9 +124,22 @@ namespace SpaceInvaders
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            //trying to keep mouse in gameWindow
+            if (Mouse.GetState().X <= 20)
+                Mouse.SetPosition(5, Mouse.GetState().Y);
+            if (Mouse.GetState().X >= _screenWidth - 20)
+                Mouse.SetPosition(_screenWidth - 20, Mouse.GetState().Y);
+            if (Mouse.GetState().Y <= 20)
+                Mouse.SetPosition(Mouse.GetState().X, 20);
+            if (Mouse.GetState().Y >= _screenHeight - 20)
+                Mouse.SetPosition(Mouse.GetState().X, _screenHeight - 20);
+
 
             KeyboardState newKeyboardState = Keyboard.GetState();
             MouseState newMouseState = Mouse.GetState();
+
+            
+
 
             if (oldMouseState.X != newMouseState.X)
             {
@@ -178,6 +193,8 @@ namespace SpaceInvaders
             player.Draw();
             enemyWall.Draw();
             bulletManager.Draw();
+
+            spriteBatch.DrawString(font, "Score", new Vector2(10, 10), Color.White);
 
             spriteBatch.End();
 
