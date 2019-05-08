@@ -16,7 +16,7 @@ namespace SpaceInvaders
         public List<Bullet> Bullets = new List<Bullet>();
         public List<Bullet> tempBullets = new List<Bullet>();
         private EnemyWall _enemyWall;
-
+        public int score = 0;
 
         private SpriteBatch _spriteBatch;
         private GameContent _gameContent;
@@ -73,7 +73,7 @@ namespace SpaceInvaders
                 }
             }
 
-            
+
         }
 
         private void CheckHit()
@@ -94,13 +94,14 @@ namespace SpaceInvaders
                             {
                                 Bullet.Kill();
                                 Enemy.Kill();
+                                score += 10;
+
                                 
                             }
                         }
                     }
                 }
-            }
-            
+            }            
         }
 
         public void Shoot(float x, float y)

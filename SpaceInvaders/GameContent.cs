@@ -18,6 +18,7 @@ namespace SpaceInvaders
 
         public SpriteFont gameFont { get; set; }
         public Texture2D imgTitle { get; set; }
+        public Texture2D imgEndScreen { get; set; }
         public GameContent(ContentManager Content)
         {
             imgInvader = Content.Load<Texture2D>("Invader");
@@ -25,6 +26,7 @@ namespace SpaceInvaders
             imgBullet = Content.Load<Texture2D>("Bullet");
             imgBackground = Content.Load<Texture2D>("background");
             imgTitle = Content.Load<Texture2D>("Cat");
+            imgEndScreen = Content.Load<Texture2D>("endCat");
 
             gameFont = Content.Load<SpriteFont>("GameFont");
         }

@@ -37,7 +37,8 @@ namespace SpaceInvaders
         private KeyboardState oldKeyboardState;
 
         private bool gameStart = false;
-        
+        private bool gameEnd = false;
+        private int score = 0;
 
         /// <summary>
         /// Time Objects
@@ -153,9 +154,15 @@ namespace SpaceInvaders
                 }
             }
 
-            if (newMouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton != ButtonState.Pressed)
+            if (newMouseState.LeftButton == ButtonState.Pressed && oldMouseState.LeftButton != ButtonState.Pressed && gameStart)
             {
                 bulletManager.Shoot(player.GetX(), player.GetY());
+            }
+            //center mouse when starting game
+            else if(newMouseState.LeftButton == ButtonState.Pressed && !gameStart)
+            {
+                gameStart = true;
+                Mouse.SetPosition(_screenWidth / 2, _screenHeight / 2);
             }
 
             if (newKeyboardState.IsKeyDown(Keys.Left))
@@ -178,6 +185,9 @@ namespace SpaceInvaders
 
             enemyWall.Update();
             bulletManager.Update();
+            if (!enemyWall.GetEnemies().Any(e => e.CheckAlive()))
+                gameEnd = true;
+
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -193,19 +203,25 @@ namespace SpaceInvaders
 
             spriteBatch.Begin();
 
-            if (gameStart)
-            {
-                
+            spriteBatch.Draw(gameContent.imgBackground, mainFrame, Color.White);
+
+            if (gameStart && !gameEnd)
+            {                
                 player.Draw();
                 enemyWall.Draw();
                 bulletManager.Draw();
+                fontManager.DrawScore(bulletManager.score);
+
+            }
+            else if(!gameEnd)
+            {
+                
+                fontManager.DrawTitleScreen();
             }
             else
             {
-                spriteBatch.Draw(gameContent.imgBackground, mainFrame, Color.White);
-                fontManager.DrawTitleScreen();
+                fontManager.DrawEndScreen();
             }
-
             
 
 

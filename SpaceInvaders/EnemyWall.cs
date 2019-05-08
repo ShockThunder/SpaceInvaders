@@ -41,7 +41,7 @@ namespace SpaceInvaders
             _enemyWidth = gameContent.imgInvader.Width + 10;
             _enemyHeight = gameContent.imgInvader.Height + 10;
             _initialY = 50;
-            _initialX = _screenWidth / 2 - ((_enemyCountX + 1)* _enemyWidth) / 2;
+            _initialX = _screenWidth / 2 - ((_enemyCountX + 1) * _enemyWidth) / 2;
 
             FillEnemies();
         }
@@ -208,5 +208,6 @@ namespace SpaceInvaders
         {
             return Enemies;
         }
+
     }
 }

@@ -19,8 +19,6 @@ namespace SpaceInvaders
         private int _width;
         private int _height;
 
-        //private int _screenWidth;
-        //private int _screenHeight;
 
         private SpriteBatch _spriteBatch;
         private GameContent _gameContent;
