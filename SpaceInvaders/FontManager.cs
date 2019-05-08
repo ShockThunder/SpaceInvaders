@@ -63,8 +63,10 @@ namespace SpaceInvaders
         {
             string title = "CONGRATULATIONS!";
             string endMsg = "You save space from invaders!";
+            string exitMsg = "Press LMB to exit game";
             Vector2 titleSize = _gameFont.MeasureString(title);
             Vector2 startMsgSize = _gameFont.MeasureString(endMsg);
+            Vector2 exitMsgSize = _gameFont.MeasureString(exitMsg);
             float scale = 1.5f;
 
             _spriteBatch.DrawString(_gameFont, title, new Vector2((_screenWidth - titleSize.X * scale) / 2, (_screenHeight - titleSize.Y * scale) / 2),
@@ -75,6 +77,9 @@ namespace SpaceInvaders
 
             _spriteBatch.Draw(_gameContent.imgEndScreen, new Vector2((_screenWidth - (_gameContent.imgEndScreen.Width / 2)) / 2, 50), null,
                 Color.White, 0, new Vector2(0, 0), 0.4f, SpriteEffects.None, 0);
+
+            _spriteBatch.DrawString(_gameFont, exitMsg, new Vector2((_screenWidth - exitMsgSize.X) / 2, (_screenHeight + titleSize.Y * scale + startMsgSize.Y * 4 + exitMsgSize.Y * 6) / 2),
+                Color.White, 0.0f, default, 1.0f, SpriteEffects.None, 0);
         }
 
         

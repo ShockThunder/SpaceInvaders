@@ -164,6 +164,10 @@ namespace SpaceInvaders
                 gameStart = true;
                 Mouse.SetPosition(_screenWidth / 2, _screenHeight / 2);
             }
+            else if (newMouseState.LeftButton == ButtonState.Pressed && gameEnd)
+            {
+                this.Exit();
+            }
 
             if (newKeyboardState.IsKeyDown(Keys.Left))
             {
