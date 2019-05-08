@@ -37,12 +37,24 @@
 /processorParam:TextureFormat=Color
 /build:Bullet.png
 
+#begin cat.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:cat.png
+
 #begin GameText.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:GameText.spritefont
+/build:GameText.spritefont;GameFont.spritefont
 
 #begin Invader.png
 /importer:TextureImporter

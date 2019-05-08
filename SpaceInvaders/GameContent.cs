@@ -16,16 +16,17 @@ namespace SpaceInvaders
         public Texture2D imgBullet { get; set; }
         public Texture2D imgBackground { get; set; }
 
-        public SpriteFont font { get; set; }
-
+        public SpriteFont gameFont { get; set; }
+        public Texture2D imgTitle { get; set; }
         public GameContent(ContentManager Content)
         {
             imgInvader = Content.Load<Texture2D>("Invader");
             imgPlayer = Content.Load<Texture2D>("Player");
             imgBullet = Content.Load<Texture2D>("Bullet");
             imgBackground = Content.Load<Texture2D>("background");
+            imgTitle = Content.Load<Texture2D>("Cat");
 
-            font = Content.Load<SpriteFont>("GameText");
+            gameFont = Content.Load<SpriteFont>("GameFont");
         }
     }
 }

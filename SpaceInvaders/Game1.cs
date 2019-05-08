@@ -20,7 +20,7 @@ namespace SpaceInvaders
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         GameContent gameContent;
-        SpriteFont font;
+        FontManager fontManager;
         Rectangle mainFrame;
         /// <summary>
         /// Gameplay objects
@@ -35,6 +35,8 @@ namespace SpaceInvaders
         private int _screenHeight = 0;
         private MouseState oldMouseState;
         private KeyboardState oldKeyboardState;
+
+        private bool gameStart = false;
         
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace SpaceInvaders
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             gameContent = new GameContent(Content);
-            font = gameContent.font;
+            
 
             //Initialize Screen
             _screenHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
@@ -87,6 +89,8 @@ namespace SpaceInvaders
             graphics.PreferredBackBufferHeight = _screenHeight;
             graphics.ApplyChanges();
 
+
+            fontManager = new FontManager(_screenWidth, _screenHeight, spriteBatch, gameContent);
             //Initialize gameplay objects
             player = new Player(_screenWidth, _screenHeight, spriteBatch, gameContent);
             enemyWall = new EnemyWall(_screenWidth, _screenHeight, spriteBatch, gameContent);
@@ -189,12 +193,21 @@ namespace SpaceInvaders
 
             spriteBatch.Begin();
 
-            spriteBatch.Draw(gameContent.imgBackground, mainFrame, Color.White);
-            player.Draw();
-            enemyWall.Draw();
-            bulletManager.Draw();
+            if (gameStart)
+            {
+                
+                player.Draw();
+                enemyWall.Draw();
+                bulletManager.Draw();
+            }
+            else
+            {
+                spriteBatch.Draw(gameContent.imgBackground, mainFrame, Color.White);
+                fontManager.DrawTitleScreen();
+            }
 
-            spriteBatch.DrawString(font, "Score", new Vector2(10, 10), Color.White);
+            
+
 
             spriteBatch.End();
 

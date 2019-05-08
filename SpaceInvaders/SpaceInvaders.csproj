@@ -45,6 +45,7 @@
     <Compile Include="BulletManager.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyWall.cs" />
+    <Compile Include="FontManager.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameContent.cs" />
     <Compile Include="Player.cs" />
