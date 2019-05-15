@@ -38,7 +38,6 @@ namespace SpaceInvaders
 
         private bool gameStart = false;
         private bool gameEnd = false;
-        private int score = 0;
 
         /// <summary>
         /// Time Objects

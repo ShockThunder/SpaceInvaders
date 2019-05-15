@@ -54,21 +54,13 @@ namespace SpaceInvaders
 
                 if (Bullets.Count > 30)
                 {
-                    
-                    foreach (var Bullet in Bullets)
-                    {
-                        if (Bullet.CheckAlive())
-                        {
-                            tempBullets.Add(Bullet);
-                        }
-                    }
+
+
+                    tempBullets = Bullets.Where(t => t.CheckAlive()).ToList();                    
                     Bullets.Clear();
 
-                    foreach (var Bullet in tempBullets)
-                    {
-                        Bullets.Add(Bullet);
-                    }
 
+                    Bullets = tempBullets.Where(t => t.CheckAlive()).ToList();                    
                     tempBullets.Clear();
                 }
             }
